@@ -11,8 +11,8 @@ Complete the lab assignment by filling in the template. Knit it to a Github docu
 8. Join multiple datasets using appropriate join strategies and explain how different join types affect the resulting output. (Task 6 and 7)
   - Instructor response: 
 32. Use Git and Github to create and share project materials in a repository format. (Lab submission)
-  - Instructor response: 
+  - Instructor response:
 
-* Challenge question:
+Challenge question:
 
 Lab assessment:
