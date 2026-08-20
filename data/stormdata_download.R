@@ -28,9 +28,11 @@ file_download<-function(file_sel){
   data <- read_csv(gzfile(destfile)) %>%
     mutate(TOR_OTHER_CZ_FIPS=as.character(TOR_OTHER_CZ_FIPS),
            DAMAGE_CROPS=as.character(DAMAGE_CROPS),
-           cty_fips=paste0(str_pad(STATEFIPS,width=2,pad="0",
-                                   str_pad(CZ_FIPS,width=3,pad="0"))) %>%
-    select(BEGIN_YEARMONTH:CZ_NAME,cty_fips,everything()))
+           cty_fips=paste0(
+             str_pad(STATE_FIPS,width=2,pad="0","left"),
+             str_pad(CZ_FIPS,width=3,pad="0","left"))
+    ) %>%
+    select(BEGIN_YEARMONTH:CZ_NAME,cty_fips,everything())
   
   data 
 }
@@ -42,13 +44,23 @@ storm_types<-unique(data$EVENT_TYPE)
 
 
 #Write the storm csvs
-write_storm<-function(type_sel){
-  stormtype<-tolower(type_sel) |>
-    gsub(" ", "_", x = _) |>               # Replace spaces with underscores
-    gsub("[^A-Za-z0-9_]", "", x = _)       # Remove all non-alphanumeric and non-underscore characters
+write_storm <- function(type_sel) {
+  stormtype <- tolower(type_sel) |>
+    gsub(" ", "_", x = _) |>
+    gsub("[^A-Za-z0-9_]", "", x = _)
   
-  file_name<-paste0("data/stormevents/noaa_stormevent_",stormtype,"_2025_05.csv")
-  write_csv(data %>% filter(EVENT_TYPE==type_sel),file_name)
+  dir.create("data/stormevents", recursive = TRUE, showWarnings = FALSE)
+  
+  file_name <- paste0(
+    "data/stormevents/noaa_stormevent_",
+    stormtype,
+    "_2026_08.csv"
+  )
+  
+  write_csv(
+    data %>% filter(EVENT_TYPE == type_sel),
+    file_name
+  )
 }
 
-map(storm_types,write_storm)
+map(storm_types, write_storm)
