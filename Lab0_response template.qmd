@@ -12,7 +12,7 @@ execute:
 library(tidyverse)
 ```
 
-*Your name: {Your name here}*
+*Your name: Mary Elizabeth Rudd*
 
 This "lab" assignment provides an opportunity to learn the basic mechanics of Github classroom, loading data, and doing some basic data manipulation using the tools in the tidyverse. Through this lab, you will identify counties with the highest levels of social vulnerability that also had high numbers of severe tornadoes (rated F3 and higher) during this study period.
 
@@ -37,12 +37,16 @@ You can load the tornado data (`noaa_stormevent_tornado_2026_08.csv` in the fold
 ```{r}
 #| label: Task1
 
-# Your code goes here.
+Tornado<-read.csv("data/stormevents/noaa_stormevent_tornado_2026_08.csv")
+SVI<-read.csv("data/SVI_2022_US_county.csv")
 ```
 
 **Task 2:** *Pick two variables from either dataset that use different levels of measurement (nominal, ordinal, interval or ratio). Explain which level best describes each variable and why. Also identify one variable that would be more efficiently read as a factor, and explain why.*
 
-{Your explanation goes here.}
+From the Tornado Dataset: 
+1. Variable "State" is nominal data, because it is made of characters/qualitative data that doesn't have an inherent order
+2. Variable "Injuries_Direct" is ratio data, because it is quantitative (made of numbers) and has a meaningful 0. (0 injuries is 0 injuries)
+Factor efficient variable: "Month_Name" is a variable that could be efficiently read as a factor, as the months of the year (qualitative) can be sorted from January to December
 
 ## Filtering and/or summarizing the data
 
@@ -61,7 +65,7 @@ To do so, you'll need to:
 ```{r}
 #| label: Task3
 
-# Your code goes here.
+#insert code here
 ```
 
 You also want to filter the social vulnerability data so that it only includes counties with a population over 25,000 people. This allows us to only track counties with a moderate or large population. Use the SVI Documentation pdf in the data folder to determine which variable this is, recognizing that you want the **estimate** and not the margin of error (MOE).
@@ -99,8 +103,8 @@ Next you'll need to join these tornado counts to SVI population data using the `
 **NOTE:** You may need to change the name of the population data below to match the object you used for the SVI data.
 
 ```{r}
-svi <- svi %>%
-  rename(cty_fips = FIPS)
+#svi <- svi %>%
+ # rename(cty_fips = FIPS)
 ```
 
 Call the function above to rename your data. Now you're ready to join the data.

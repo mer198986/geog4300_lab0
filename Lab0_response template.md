@@ -1,0 +1,203 @@
+# Geog4/6300: Lab 0–Tornadoes and social vulnerability
+
+
+*Your name: {Mary Elizabeth Rudd}*
+
+This “lab” assignment provides an opportunity to learn the basic
+mechanics of Github classroom, loading data, and doing some basic data
+manipulation using the tools in the tidyverse. Through this lab, you
+will identify counties with the highest levels of social vulnerability
+that also had high numbers of severe tornadoes (rated F3 and higher)
+during this study period.
+
+This lab assesses the following learning standards:
+
+1.  Classify variables by measurement type (nominal, ordinal, interval,
+    ratio) and justify those classifications with reference to the
+    characteristics of the data. (Task 2)
+2.  Load tabular and spatial data into a code-based environment from
+    multiple sources, including local files, remote APIs, and spatial
+    file formats. (Task 1)
+3.  Filter, aggregate, and transform datasets using grouping and summary
+    operations to answer specific analytical questions. (Task 3, 4, and
+    5)
+4.  Join multiple datasets using appropriate join strategies and explain
+    how different join types affect the resulting output. (Task 6 and 7)
+5.  Use Git and Github to create and share project materials in a
+    repository format. (Lab submission)
+
+## Loading the data
+
+We’ll be combining two datasets for this assignment: NOAA’s database of
+tornadoes from 1950-2026 (so far) and the CDC’s Social Vulnerability
+Index (SVI): https://www.atsdr.cdc.gov/place-health/php/svi/index.html
+
+You can load the tornado data (`noaa_stormevent_tornado_2026_08.csv` in
+the folder `data/stormevents/`) using the `read_csv` function. The SVI
+data is located at `data/SVI_2022_US_county.csv`. Load the tornado
+dataset into an object called `tornadoes` and the SVI dataset into an
+object called `svi`.
+
+(Side note: you can see how we downloaded this data directly from NWS in
+the “stormdata_download” script in the data folder.)
+
+**Task 1:** *Load the tornado data and the SVI data using `read_csv`.*
+
+``` r
+Tornado<-read.csv("data/stormevents/noaa_stormevent_tornado_2026_08.csv")
+SVI<-read.csv("data/SVI_2022_US_county.csv")
+```
+
+**Task 2:** *Pick two variables from either dataset that use different
+levels of measurement (nominal, ordinal, interval or ratio). Explain
+which level best describes each variable and why. Also identify one
+variable that would be more efficiently read as a factor, and explain
+why.*
+
+From the Tornado Dataset: 1.
+
+## Filtering and/or summarizing the data
+
+Open up the tornado data frame so you can look at it. There’s multiple
+variables here related to the timing of the tornado, its location, its
+magnitude, and the number of injuries and fatalities. You can open the
+“Storm-Data-Bulk-csv_Format” pdf in the data folder to learn more about
+them.
+
+For this part of the lab, you want to count the number of tornadoes
+rated F3 or higher (the `TOR_F_SCALE` variable) within each county (the
+`cty_fips` and `CZ_NAME` variables). Your resulting data frame should
+have one row per county and state combination, with a variable that
+stores the total number of severe tornadoes.
+
+To do so, you’ll need to:
+
+1.  Filter the `TOR_F_SCALE` variable to only include observations rated
+    F3, F4, or F5.
+2.  Use `group_by()` to group the data by the county and state fips
+    codes and names (`STATE_FIPS`, `STATE`, `cty_fips`, and `CZ_NAME`).
+3.  Use `summarise()` to count the number of these severe tornadoes
+    within these groups.
+
+**Task 3:** *Filter the storm data to include tornadoes rated F3 or
+higher and then count the number of events by county and state.*
+
+``` r
+# Your code goes here.
+```
+
+You also want to filter the social vulnerability data so that it only
+includes counties with a population over 25,000 people. This allows us
+to only track counties with a moderate or large population. Use the SVI
+Documentation pdf in the data folder to determine which variable this
+is, recognizing that you want the **estimate** and not the margin of
+error (MOE).
+
+Filter the data below.
+
+**Task 4:** *Filter the SVI data to include counties with a population
+of 25,000 or more.*
+
+``` r
+# Your code goes here.
+```
+
+Let’s add one more filter based on social vulnerability. When you look
+at the documentation there are a number of “dummy” variables (0/1) that
+flag counties that are at or above the 90th percentile for a number of
+factors. For example, `F_DISABL` flags counties in the top 10% for
+percentage of persons with a disability. There are also cumulative
+flags: `F_THEME2` sums all the flagged variables within the “Household
+Characteristics” category.
+
+Pick one of those flags. It could be for a specific variable or a
+cumulative one. Your selected flag should have a plausible connection to
+tornado preparedness, evacuation, sheltering, recovery, or access to
+warnings.
+
+Filter the dataset you created in Task 4 so that it only includes
+counties you are considering vulnerable. Then list that flagged variable
+and explain how you chose it and (if the flag is cumulative) how you
+picked a numeric cutoff.
+
+**Task 5:** *Filter the data from Task 4 to only vulnerable counties and
+explain your decision.*
+
+``` r
+# Your code goes here.
+```
+
+Describe your variable, why you chose it, and (if applicable) why you
+chose the cutoff you did.
+
+## Connecting the data
+
+Next you’ll need to join these tornado counts to SVI population data
+using the `inner_join()` function. To do so you’ll need to have two
+fields with the same name in each dataset. The FIPS codes are in both
+datasets, but they have different names (`FIPS` and `cty_fips`). The
+following code creates a new variable called `cty_fips` in the SVI data
+using `rename()`.
+
+**NOTE:** You may need to change the name of the population data below
+to match the object you used for the SVI data.
+
+``` r
+#svi <- svi %>%
+ # rename(cty_fips = FIPS)
+```
+
+Call the function above to rename your data. Now you’re ready to join
+the data.
+
+**Task 6:** *Use `inner_join()` to connect the filtered tornado data to
+your county data from Task 5.*
+
+``` r
+# Your code goes here.
+```
+
+**Task 7:** *Find some documentation on the `inner_join()` function
+online or using help in R. Describe how it works, and explain how the
+results would have been different if you used `full_join()` instead.*
+
+{Write your response here.}
+
+## Answering your research question
+
+**Task 8:** *Open up your joined dataset. Which three vulnerable
+counties have the highest number of severe tornadoes and how many were
+in each? Are there cities or other notable geographic features located
+in these counties?*
+
+{Write your response here.}
+
+## Challenge question
+
+Find a peer-reviewed article published in the last ten years that uses
+this NWS/NOAA tornado dataset. What research question was it trying to
+answer? What methods were used? What are the most notable findings? Give
+the full citation and a summary of at least 100 words below.
+
+Write your response here.
+
+## Final submission stuff
+
+**Disclosure of assistance:** Besides class materials, what other
+sources of assistance did you use while completing this lab? These can
+include input from classmates, relevant material identified through web
+searches (e.g., Stack Overflow), or assistance from ChatGPT or other AI
+tools. How did these sources support your own learning in completing
+this lab?
+
+Write your response here.
+
+**Lab reflection:** How do you feel about the work you did on this lab?
+Was it easy, moderate, or hard? What are the biggest things you learned
+by completing it?
+
+Write your response here.
+
+That’s it! When you’re done with this lab, use the Render command in
+Quarto to create a GitHub markdown document. Then push it to GitHub
+using the procedure outlined in this week’s videos.
